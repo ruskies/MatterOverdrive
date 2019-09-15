@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using MatterOverdrive.Commands;
 using Microsoft.Xna.Framework.Input;
 using Terraria.GameInput;
@@ -35,5 +36,8 @@ namespace MatterOverdrive.Players
                 }
             }
         }
+
+
+        public ReadOnlyDictionary<Keys, string> Binds => new ReadOnlyDictionary<Keys, string>(_binds);
     }
 }

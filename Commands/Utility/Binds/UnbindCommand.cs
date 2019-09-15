@@ -4,7 +4,7 @@ using MatterOverdrive.Players;
 using Microsoft.Xna.Framework.Input;
 using Terraria;
 
-namespace MatterOverdrive.Commands.Utility
+namespace MatterOverdrive.Commands.Utility.Binds
 {
     public class UnbindCommand : Command
     {

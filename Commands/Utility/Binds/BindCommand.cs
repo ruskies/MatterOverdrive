@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Text;
 using MatterOverdrive.Players;
 using Microsoft.Xna.Framework.Input;
 using Terraria;
 
-namespace MatterOverdrive.Commands.Utility
+namespace MatterOverdrive.Commands.Utility.Binds
 {
     public class BindCommand : Command
     {
@@ -15,6 +17,16 @@ namespace MatterOverdrive.Commands.Utility
 
         public override bool Run(MOPlayer moPlayer, string usedName, string inputLine, List<string> args)
         {
+            if (args.Count == 1)
+            {
+                string arg = args[0].ToLower();
+
+                if (arg == "-l" || arg == "-list")
+                    ListBinds(moPlayer.Binds);
+
+                return true;
+            }
+
             if (args.Count < 2)
                 return false;
 
@@ -38,6 +50,16 @@ namespace MatterOverdrive.Commands.Utility
             moPlayer.Bind(key, toBind);
 
             return true;
+        }
+
+        private void ListBinds(IReadOnlyDictionary<Keys, string> binds)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (KeyValuePair<Keys, string> bind in binds)
+                sb.AppendLine($"{bind.Key}: {bind.Value}");
+
+            Main.NewTextMultiline(sb.ToString());
         }
     }
 }
