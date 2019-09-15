@@ -21,7 +21,7 @@ namespace MatterOverdrive.Commands.Utility
             if (!Enum.TryParse(args[0], true, out Keys key))
             {
                 Main.NewText($"Key {args[0]} not found.", 255, 0, 0);
-                return false;
+                return true;
             }
 
             string[] splitLine = inputLine.Split(' ');
