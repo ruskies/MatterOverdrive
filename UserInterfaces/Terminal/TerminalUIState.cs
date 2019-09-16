@@ -6,6 +6,7 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.GameInput;
 using Terraria.ModLoader.UI.Elements;
 using Terraria.UI;
+using WebmilioCommons.Inputs;
 
 namespace MatterOverdrive.UserInterfaces.Terminal
 {
@@ -65,36 +66,36 @@ namespace MatterOverdrive.UserInterfaces.Terminal
             base.Update(gameTime);
             Output.MarginTop = 0.1f;
 
-            if (FocusedOnInput && InputField.Text.Length < 100)
+            if (FocusedOnInput)
             {
-                Main.GetInputText("");
-            }
+                if (InputField.Text.Length < 100)
+                {
+                    Main.GetInputText("");
+                }
 
-            if (WebmilioCommons.Inputs.KeyboardManager.pressed.Contains(Keys.Back) && FocusedOnInput)
-                InputField.Backspace();
+                if (KeyboardManager.IsPressed(Keys.Back))
+                    InputField.Backspace();
 
-            if(WebmilioCommons.Inputs.KeyboardManager.justPressed.Contains(Keys.Enter) && InputField.Text.Length > 0 && FocusedOnInput)
-            {
-                UIText latestText = new UIText("> " + InputField.Text);
+                if (KeyboardManager.IsJustPressed(Keys.Enter) && InputField.Text.Length > 0)
+                {
+                    UIText latestText = new UIText("> " + InputField.Text);
 
-                while (latestText.Text.Length < 70)
+                    while (latestText.Text.Length < 70)
                     {
                         latestText.SetText(latestText.Text + " ");
                     }
 
-                Output.Add(latestText);
-                Output._items.Sort();
+                    Output.Add(latestText);
+                    Output._items.Sort();
 
-                if (InputField.Text == ">clear")
-                    Output.Clear();
+                    if (InputField.Text == "> ")
+                        Output.Clear();
 
-                InputField.SetText("");
-                Recalculate();
-                OutputScrollBar.ViewPosition = float.MaxValue;
-            }
+                    InputField.SetText("");
+                    Recalculate();
+                    OutputScrollBar.ViewPosition = float.MaxValue;
+                }
 
-            if(FocusedOnInput)
-            {
                 Main.clrInput();
                 Main.chatRelease = true;
                 Main.editChest = true;

@@ -35,6 +35,7 @@ namespace MatterOverdrive.Commands
             return commands;
         }
 
+
         public bool Exists(string command) => typeByName.ContainsKey(command);
 
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MatterOverdrive.Android;
 using MatterOverdrive.Players;
 using Terraria;
 using Terraria.ModLoader;
@@ -11,7 +12,12 @@ namespace MatterOverdrive.Commands
         {
             if (args.Length == 0)
             {
-                // TODO Open console
+                //AndroidConsole.Open();
+                //return;
+
+                if (caller.Player == Main.LocalPlayer)
+                    MOMod.Instance.TerminalLayer.TerminalUIState.Visible = true;
+
                 return;
             }
 
@@ -20,7 +26,7 @@ namespace MatterOverdrive.Commands
 
             string commandName = parsedArgs[0];
             parsedArgs.RemoveAt(0);
-
+            
             if (!CommandLoader.Instance.Exists(commandName))
             {
                 Main.NewText($"Command '{commandName}' not found. Use /help for a list of available commands.");

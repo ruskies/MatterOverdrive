@@ -18,20 +18,5 @@
     <Reference Include="WebmilioCommons">
       <HintPath>bin\Debug\net45\WebmilioCommons.dll</HintPath>
     </Reference>
-    <Reference Include="WebmilioCommons">
-      <HintPath>bin\Debug\net45\WebmilioCommons.dll</HintPath>
-    </Reference>
-    <Reference Include="WebmilioCommons">
-      <HintPath>bin\Debug\net45\WebmilioCommons.dll</HintPath>
-    </Reference>
-    <Reference Include="WebmilioCommons">
-      <HintPath>bin\Debug\net45\WebmilioCommons.dll</HintPath>
-    </Reference>
-    <Reference Include="WebmilioCommons">
-      <HintPath>bin\Debug\net45\WebmilioCommons.dll</HintPath>
-    </Reference>
-    <Reference Include="WebmilioCommons">
-      <HintPath>bin\Debug\net45\WebmilioCommons.dll</HintPath>
-    </Reference>
   </ItemGroup>
 </Project>

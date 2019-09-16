@@ -2,7 +2,7 @@
 
 namespace MatterOverdrive.Players
 {
-    public class PlayerOSRunningStateChanged : ModPlayerNetworkPacket<MOPlayer>
+    public sealed class PlayerOSRunningStateChanged : ModPlayerNetworkPacket<MOPlayer>
     {
         public bool Running
         {

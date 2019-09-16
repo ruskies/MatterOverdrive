@@ -14,13 +14,15 @@ namespace MatterOverdrive.UserInterfaces.Terminal
             TerminalInterface.SetState(TerminalUIState);
         }
 
+
         protected override bool DrawSelf()
         {
-            if((bool)TerminalUIState?.Visible)
-                TerminalUIState?.Draw(Main.spriteBatch);
+            if(TerminalUIState.Visible)
+                TerminalUIState.Draw(Main.spriteBatch);
 
             return true;
         }
+
 
         public TerminalUIState TerminalUIState { get; }
         public UserInterface TerminalInterface { get; }
