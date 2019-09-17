@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using MatterOverdrive.Players;
 
-namespace MatterOverdrive.Commands.Utility
+namespace MatterOverdrive.Commands.Utility.Binds
 {
     public class UnbindAllCommand : Command
     {
