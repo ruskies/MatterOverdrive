@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.GameInput;
@@ -68,39 +70,8 @@ namespace MatterOverdrive.UserInterfaces.Terminal
 
             if (FocusedOnInput)
             {
-                if (InputField.Text.Length < 100)
-                {
-                    Main.GetInputText("");
-                }
-
-                if (KeyboardManager.IsPressed(Keys.Back))
-                    InputField.Backspace();
-
-                if (KeyboardManager.IsJustPressed(Keys.Enter) && InputField.Text.Length > 0)
-                {
-                    UIText latestText = new UIText("> " + InputField.Text);
-
-                    while (latestText.Text.Length < 70)
-                    {
-                        latestText.SetText(latestText.Text + " ");
-                    }
-
-                    Output.Add(latestText);
-                    Output._items.Sort();
-
-                    if (InputField.Text == "> ")
-                        Output.Clear();
-
-                    InputField.SetText("");
-                    Recalculate();
-                    OutputScrollBar.ViewPosition = float.MaxValue;
-                }
-
-                Main.clrInput();
-                Main.chatRelease = true;
-                Main.editChest = true;
-                Main.editSign = true;
-                PlayerInput.WritingText = true;
+                Main.chatRelease = false;
+                WriteText();
             }
 
             Recalculate();
@@ -117,12 +88,83 @@ namespace MatterOverdrive.UserInterfaces.Terminal
         private void Focus(UIMouseEvent evt, UIElement listeningElement)
         {
             FocusedOnInput = !FocusedOnInput;
+            Main.blockInput = FocusedOnInput;
             Main.clrInput();
             Main.chatRelease = FocusedOnInput;
             Main.editChest = FocusedOnInput;
             Main.editSign = FocusedOnInput;
             PlayerInput.WritingText = FocusedOnInput;
             InputField.TextColor = FocusedOnInput ? Color.Yellow : Color.White;
+        }
+
+        // this sucks but there is no way around this as far as i'm aware
+        // we have to manually filter out keys...
+        // and manually implement special keys
+        private void WriteText()
+        {
+            List<Keys> filteredKeys = new List<Keys>
+            {
+                Keys.LeftShift, Keys.LeftControl, Keys.Space, Keys.Escape,
+                Keys.Back, Keys.OemTilde, Keys.CapsLock, Keys.Add, Keys.Subtract,
+                Keys.Insert, Keys.Home, Keys.End, Keys.Scroll, Keys.Enter
+            };
+
+            // Idk if its good approach or not, as i haven't seen how KeyboardManager works.
+            foreach (Keys key in KeyboardManager.justPressed)
+            {
+                if (key == Keys.Back)
+                    InputField.Backspace();
+
+                if (key == Keys.Space)
+                    InputField.Write(" ");
+
+                if(key == Keys.Enter && InputField.Text.Length > 0)
+                {
+                    SendCommand();
+                }
+
+                string keyName = key.ToString();
+
+                if (keyName.Contains("Oem") || keyName.Contains("alt"))
+                    filteredKeys.Add(key);
+
+                if (keyName.Contains("NumPad"))
+                    keyName = keyName.Replace("NumPad", ""); // should make numpad numbers be easier to type
+
+                if (keyName.Contains("D") && keyName.Any(char.IsDigit))
+                    keyName = keyName.Replace("D", "");
+
+                if (filteredKeys.Contains(key))
+                    continue;
+
+                if (InputField.Text.Length < 100)
+                {
+                    if (KeyboardManager.pressed.Contains(Keys.LeftShift))
+                        InputField.Write(keyName);
+                    else
+                        InputField.Write(keyName.ToLower());
+                }
+            }
+        }
+
+        private void SendCommand()
+        {
+            UIText latestText = new UIText("> " + InputField.Text);
+
+            while (latestText.Text.Length < 70)
+            {
+                latestText.SetText(latestText.Text + " ");
+            }
+
+            Output.Add(latestText);
+            Output._items.Sort();
+
+            if (InputField.Text == "> ")
+                Output.Clear();
+
+            InputField.SetText("");
+            Recalculate();
+            OutputScrollBar.ViewPosition = float.MaxValue;
         }
 
         public UIScrollbar OutputScrollBar { get; private set; }

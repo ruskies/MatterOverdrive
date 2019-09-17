@@ -6,20 +6,21 @@ namespace MatterOverdrive.Players
     {
         private bool _osRunning;
 
+        // stuff gave me errors so i commented it out
 
         public void TryStart()
         {
             if (Running)
                 return;
 
-            this.SendIfLocal<PlayerOSRunningStateChanging>();
+            //this.SendIfLocal<PlayerOSRunningStateChanging>();
 
             Running = true;
         }
 
         public void Shutdown(int code)
         {
-            this.SendIfLocal<PlayerOSRunningStateChanging>();
+            //this.SendIfLocal<PlayerOSRunningStateChanging>();
 
             Running = false;
             LastShutdownCode = code;
@@ -36,7 +37,7 @@ namespace MatterOverdrive.Players
 
                 _osRunning = value;
 
-                this.SendIfLocal<PlayerOSRunningStateChanged>();
+                //this.SendIfLocal<PlayerOSRunningStateChanged>();
             }
         }
 
