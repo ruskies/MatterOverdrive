@@ -3,9 +3,9 @@ using MatterOverdrive.Players;
 
 namespace MatterOverdrive.Commands.Utility.Binds
 {
-    public class UnbindAllCommand : Command
+    public class UnbindAllAndroidCommand : AndroidCommand
     {
-        public UnbindAllCommand() : base("unbindall")
+        public UnbindAllAndroidCommand() : base("unbindall")
         {
         }
 

@@ -22,7 +22,7 @@ namespace MatterOverdrive.Android
                 StartInfo = new ProcessStartInfo("cmd")
                 {
                     RedirectStandardOutput = true,
-                    RedirectStandardInput = true,
+                    RedirectStandardInput = false,
                     RedirectStandardError = true,
                     
                     UseShellExecute = false,
@@ -33,6 +33,7 @@ namespace MatterOverdrive.Android
             Process.OutputDataReceived += ConsoleOnOutputDataReceived;
             Process.Exited += ConsoleOnExited;
 
+            KeyboardManager.KeyPressed += KeyboardManagerOnKeyPressed;
 
             Process.Start();
 
@@ -40,6 +41,12 @@ namespace MatterOverdrive.Android
 
             Thread thread = new Thread(WatchExit);
             thread.Start();
+        }
+
+        private static void KeyboardManagerOnKeyPressed(Keys key)
+        {
+            Process.StandardInput.Write((char) key);
+            Process.StandardInput.Flush();
         }
 
 
@@ -62,6 +69,8 @@ namespace MatterOverdrive.Android
         private static void ConsoleOnExited(object sender, EventArgs e)
         {
             Main.NewText("Closed existing Android Console.");
+
+            KeyboardManager.KeyPressed -= KeyboardManagerOnKeyPressed;
 
             Process.Exited -= ConsoleOnExited;
             Process.OutputDataReceived -= ConsoleOnOutputDataReceived;

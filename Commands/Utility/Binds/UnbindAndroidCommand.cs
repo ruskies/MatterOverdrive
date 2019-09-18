@@ -6,9 +6,9 @@ using Terraria;
 
 namespace MatterOverdrive.Commands.Utility.Binds
 {
-    public class UnbindCommand : Command
+    public class UnbindAndroidCommand : AndroidCommand
     {
-        public UnbindCommand() : base("unbind")
+        public UnbindAndroidCommand() : base("unbind")
         {
         }
 

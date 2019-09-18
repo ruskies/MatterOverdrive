@@ -8,9 +8,9 @@ using Terraria;
 
 namespace MatterOverdrive.Commands.Utility.Binds
 {
-    public class BindCommand : Command
+    public class BindAndroidCommand : AndroidCommand
     {
-        public BindCommand() : base("bind")
+        public BindAndroidCommand() : base("bind")
         {
         }
 
@@ -39,7 +39,19 @@ namespace MatterOverdrive.Commands.Utility.Binds
             string[] splitLine = inputLine.Split(' ');
             string toBind = null;
 
-            for (int i = 3; i < splitLine.Length; i++)
+            if (splitLine.Length < 2)
+            {
+                Main.NewText("Bind failed.", 255, 0, 0);
+                return true;
+            }
+
+            if (!CommandLoader.Instance.Exists(splitLine[2]))
+            {
+                Main.NewText($"Command {splitLine[2]} does not exist.");
+                return true;
+            }
+
+            for (int i = 2; i < splitLine.Length; i++)
             {
                 toBind += splitLine[i];
 

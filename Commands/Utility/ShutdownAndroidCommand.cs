@@ -5,9 +5,9 @@ using Terraria.ID;
 
 namespace MatterOverdrive.Commands.Utility
 {
-    public class ShutdownCommand : Command
+    public class ShutdownAndroidCommand : AndroidCommand
     {
-        public ShutdownCommand() : base("shutdown")
+        public ShutdownAndroidCommand() : base("shutdown")
         {
         }
 

@@ -1,19 +1,22 @@
 ﻿using System.Collections.Generic;
 using MatterOverdrive.Players;
-using Terraria;
 
 namespace MatterOverdrive.Commands.Utility
 {
-    public class DisconnectCommand : Command
+    public class StartAndroidCommand : AndroidCommand
     {
-        public DisconnectCommand() : base("disconnect")
+        public StartAndroidCommand() : base("start")
         {
         }
-        
+
 
         public override bool Run(MOPlayer moPlayer, string usedName, string inputLine, List<string> args)
         {
-            WorldGen.SaveAndQuit();
+            if (args.Count == 0)
+            {
+                moPlayer.TryStart();
+                return true;
+            }
 
             return true;
         }

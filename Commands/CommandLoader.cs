@@ -6,39 +6,58 @@ using WebmilioCommons.Loaders;
 
 namespace MatterOverdrive.Commands
 {
-    public class CommandLoader : SingletonLoader<CommandLoader, Command>
+    public class CommandLoader : SingletonLoader<CommandLoader, AndroidCommand>
     {
         protected Dictionary<string, Type> typeByName = new Dictionary<string, Type>();
 
 
-        protected override void PostAdd(Mod mod, Command item)
+        protected override void PostAdd(Mod mod, AndroidCommand item)
         {
-            typeByName.Add(item.Name.ToLower(), item.GetType());
+            typeByName.Add(item.Command.ToLower(), item.GetType());
 
             for (int i = 0; i < item.Aliases.Count; i++)
                 typeByName.Add(item.Aliases[i], item.GetType());
         }
 
 
-        public List<Command> GetAvailableCommands(MOPlayer moPlayer)
+        public List<AndroidCommand> GetAvailableCommands(MOPlayer moPlayer)
         {
-            List<Command> commands = new List<Command>();
+            List<AndroidCommand> commands = new List<AndroidCommand>();
 
             foreach (Type type in idByType.Keys)
             {
-                Command command = New(type);
+                AndroidCommand androidCommand = New(type);
 
-                if (command.CanUse(moPlayer))
-                    commands.Add(command);
+                if (androidCommand.CanUse(moPlayer))
+                    commands.Add(androidCommand);
             }
 
             return commands;
         }
 
 
+        public bool TryRunning(MOPlayer moPlayer, string commandName, string input, List<string> args)
+        {
+            AndroidCommand command = New(commandName);
+
+            if (!command.CanUse(moPlayer))
+                return false;
+
+            return command.Run(moPlayer, commandName, input, args);
+        }
+
+        public bool TryRunning(MOPlayer moPlayer, AndroidCommand command, string input, List<string> args)
+        {
+            if (!command.CanUse(moPlayer))
+                return false;
+
+            return command.Run(moPlayer, command.Command, input, args);
+        }
+
+
         public bool Exists(string command) => typeByName.ContainsKey(command);
 
 
-        public Command New(string commandName) => New(typeByName[commandName.ToLower()]);
+        public AndroidCommand New(string commandName) => New(typeByName[commandName.ToLower()]);
     }
 }

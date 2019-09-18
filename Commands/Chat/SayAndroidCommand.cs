@@ -4,9 +4,9 @@ using Terraria;
 
 namespace MatterOverdrive.Commands.Chat
 {
-    public class SayCommand : Command
+    public class SayAndroidCommand : AndroidCommand
     {
-        public SayCommand() : base("say")
+        public SayAndroidCommand() : base("say")
         {
         }
 

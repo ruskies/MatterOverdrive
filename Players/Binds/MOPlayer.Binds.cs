@@ -12,7 +12,13 @@ namespace MatterOverdrive.Players
         private Dictionary<Keys, string> _binds = new Dictionary<Keys, string>();
 
 
-        public void Bind(Keys key, string command) => _binds.Add(key, command);
+        public void Bind(Keys key, string command)
+        {
+            if (_binds.ContainsKey(key))
+                _binds.Remove(key);
+
+            _binds.Add(key, command);
+        } 
 
         public void Unbind(Keys key) => _binds.Remove(key);
         public void UnbindAll() => _binds.Clear();
@@ -29,10 +35,9 @@ namespace MatterOverdrive.Players
                     string usedName = args[0];
                     args.RemoveAt(0);
 
-                    Command command = CommandLoader.Instance.New(usedName);
+                    AndroidCommand command = CommandLoader.Instance.New(usedName);
 
-                    if (command.CanUse(this))
-                        command.Run(this, usedName, kvp.Value, args);
+                    command.Action(player, usedName, args.ToArray());
                 }
             }
         }

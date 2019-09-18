@@ -12,8 +12,8 @@ namespace MatterOverdrive.Commands
         {
             if (args.Length == 0)
             {
-                //AndroidConsole.Open();
-                //return;
+                AndroidConsole.Open();
+                return;
 
                 if (caller.Player == Main.LocalPlayer)
                     MOMod.Instance.TerminalLayer.TerminalUIState.Visible = true;
@@ -33,14 +33,7 @@ namespace MatterOverdrive.Commands
                 return;
             }
 
-            Command command = CommandLoader.Instance.New(commandName);
-
-            MOPlayer moPlayer = caller.Player.GetModPlayer<MOPlayer>();
-
-            if (!command.CanUse(moPlayer))
-                return;
-
-            command.Run(moPlayer, commandName, input, parsedArgs);
+            CommandLoader.Instance.TryRunning(caller.Player.GetModPlayer<MOPlayer>(), commandName, input, parsedArgs);
         }
 
 
