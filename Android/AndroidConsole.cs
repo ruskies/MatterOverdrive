@@ -33,7 +33,7 @@ namespace MatterOverdrive.Android
             Process.OutputDataReceived += ConsoleOnOutputDataReceived;
             Process.Exited += ConsoleOnExited;
 
-            KeyboardManager.KeyPressed += KeyboardManagerOnKeyPressed;
+            //KeyboardManager.KeyPressed += KeyboardManagerOnKeyPressed;
 
             Process.Start();
 
@@ -70,7 +70,7 @@ namespace MatterOverdrive.Android
         {
             Main.NewText("Closed existing Android Console.");
 
-            KeyboardManager.KeyPressed -= KeyboardManagerOnKeyPressed;
+            //KeyboardManager.KeyPressed -= KeyboardManagerOnKeyPressed;
 
             Process.Exited -= ConsoleOnExited;
             Process.OutputDataReceived -= ConsoleOnOutputDataReceived;

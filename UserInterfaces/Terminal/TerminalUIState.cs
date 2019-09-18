@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MatterOverdrive.Extensions;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
@@ -12,6 +13,11 @@ using WebmilioCommons.Inputs;
 
 namespace MatterOverdrive.UserInterfaces.Terminal
 {
+    // TO DO:
+    // [ ] Add CapsLock
+    // [ ] Add Keyboard Delay
+    // [ ] Fix keys being stuck??? ( Has to do w/ KeyboardManager implementation )
+
     public class TerminalUIState : UIState
     {
         private const float
@@ -20,6 +26,8 @@ namespace MatterOverdrive.UserInterfaces.Terminal
 
         public override void OnInitialize()
         {
+            Visible = true;
+
             MainPanel = new UIPanel();
             MainPanel.Width.Set(PANEL_WIDTH, 0);
             MainPanel.Height.Set(PANEL_HEIGHT, 0);
@@ -61,8 +69,6 @@ namespace MatterOverdrive.UserInterfaces.Terminal
             base.Append(MainPanel);
         }
 
-        // TO DO: Fix chat being required to be active to be able to type [X]
-
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -70,7 +76,7 @@ namespace MatterOverdrive.UserInterfaces.Terminal
 
             if (FocusedOnInput)
             {
-                Main.chatRelease = false;
+                Main.chatRelease = false; // prevents chat from being opened when you hit Enter while focused on console
                 WriteText();
             }
 
@@ -90,7 +96,6 @@ namespace MatterOverdrive.UserInterfaces.Terminal
             FocusedOnInput = !FocusedOnInput;
             Main.blockInput = FocusedOnInput;
             Main.clrInput();
-            Main.chatRelease = FocusedOnInput;
             Main.editChest = FocusedOnInput;
             Main.editSign = FocusedOnInput;
             PlayerInput.WritingText = FocusedOnInput;
@@ -106,17 +111,48 @@ namespace MatterOverdrive.UserInterfaces.Terminal
             {
                 Keys.LeftShift, Keys.LeftControl, Keys.Space, Keys.Escape,
                 Keys.Back, Keys.OemTilde, Keys.CapsLock, Keys.Add, Keys.Subtract,
-                Keys.Insert, Keys.Home, Keys.End, Keys.Scroll, Keys.Enter
+                Keys.Insert, Keys.Home, Keys.End, Keys.Scroll, Keys.Enter, Keys.Decimal,
+                Keys.Tab, Keys.LeftWindows, Keys.RightWindows, Keys.Delete,
+                Keys.PageDown, Keys.PageUp, Keys.Pause, Keys.NumLock
             };
+
+
+            InputField.WriteOnKey(Keys.Add, "+");
+            InputField.WriteOnKey(Keys.Subtract, "-");
+            InputField.WriteOnKey(Keys.OemPeriod, ".", ">");
+            InputField.WriteOnKey(Keys.OemComma, ",", "<");
+            InputField.WriteOnKey(Keys.Space, " ");
+
+            InputField.WriteOnKey(Keys.D1, "1", "!");
+            InputField.WriteOnKey(Keys.D2, "2", "@");
+            InputField.WriteOnKey(Keys.D3, "3", "#");
+            InputField.WriteOnKey(Keys.D4, "4", "$");
+            InputField.WriteOnKey(Keys.D5, "5", "%");
+            InputField.WriteOnKey(Keys.D6, "6", "^");
+            InputField.WriteOnKey(Keys.D7, "7", "&");
+            InputField.WriteOnKey(Keys.D8, "8", "*");
+            InputField.WriteOnKey(Keys.D9, "9", "(" );
+            InputField.WriteOnKey(Keys.D0, "0", ")");
+
+            InputField.WriteOnKey(Keys.OemSemicolon, ";", ":");
+            InputField.WriteOnKey(Keys.Decimal, ".");
+            InputField.WriteOnKey(Keys.Divide, "/");
+            InputField.WriteOnKey(Keys.Multiply, "*");
+            InputField.WriteOnKey(Keys.OemQuestion, "/", "?");
+            InputField.WriteOnKey(Keys.OemTilde, "`", "~");
+            InputField.WriteOnKey(Keys.OemQuotes, "'", '"'.ToString());
+
+            InputField.WriteOnKey(Keys.OemPlus, "=", "+");
+            InputField.WriteOnKey(Keys.OemMinus, "-", "_");
+            InputField.WriteOnKey(Keys.OemCloseBrackets, "]", "}");
+            InputField.WriteOnKey(Keys.OemOpenBrackets, "[", "{");
+
 
             // Idk if its good approach or not, as i haven't seen how KeyboardManager works.
             foreach (Keys key in KeyboardManager.justPressed)
             {
                 if (key == Keys.Back)
                     InputField.Backspace();
-
-                if (key == Keys.Space)
-                    InputField.Write(" ");
 
                 if(key == Keys.Enter && InputField.Text.Length > 0)
                 {
@@ -125,24 +161,22 @@ namespace MatterOverdrive.UserInterfaces.Terminal
 
                 string keyName = key.ToString();
 
-                if (keyName.Contains("Oem") || keyName.Contains("alt"))
+                if (keyName.Contains("Oem")
+                    || keyName.Contains("Alt")
+                    || keyName.Contains("Control")
+                    || (keyName.Contains("D") && keyName.Any(char.IsDigit))
+                    )
                     filteredKeys.Add(key);
 
                 if (keyName.Contains("NumPad"))
                     keyName = keyName.Replace("NumPad", ""); // should make numpad numbers be easier to type
-
-                if (keyName.Contains("D") && keyName.Any(char.IsDigit))
-                    keyName = keyName.Replace("D", "");
 
                 if (filteredKeys.Contains(key))
                     continue;
 
                 if (InputField.Text.Length < 100)
                 {
-                    if (KeyboardManager.pressed.Contains(Keys.LeftShift))
-                        InputField.Write(keyName);
-                    else
-                        InputField.Write(keyName.ToLower());
+                    InputField.WriteOnKey(key, keyName);
                 }
             }
         }
