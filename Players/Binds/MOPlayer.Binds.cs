@@ -24,6 +24,8 @@ namespace MatterOverdrive.Players
         public void UnbindAll() => _binds.Clear();
 
 
+        #region Hooks
+
         private void ProcessTriggersBinds(TriggersSet triggersSet)
         {
             foreach (KeyValuePair<Keys, string> kvp in _binds)
@@ -41,6 +43,8 @@ namespace MatterOverdrive.Players
                 }
             }
         }
+
+        #endregion
 
 
         public ReadOnlyDictionary<Keys, string> Binds => new ReadOnlyDictionary<Keys, string>(_binds);

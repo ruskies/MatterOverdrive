@@ -5,7 +5,7 @@ namespace MatterOverdrive
 {
     public static class Utilities
     {
-        public static List<string> ParseLine(this string line, char seperator = '"')
+        public static List<string> ParseLine(this string line, char seperator = '"', char classicSeperator = ' ')
         {
             List<string> args = new List<string>();
 
@@ -17,16 +17,8 @@ namespace MatterOverdrive
                 char c = line[i];
 
                 if (c == seperator)
-                {
                     dividedArg = !dividedArg;
-
-                    if (!dividedArg)
-                    {
-                        args.Add(sb.ToString());
-                        sb.Clear();
-                    }
-                }
-                else if (c == ' ' && !dividedArg)
+                else if (c == classicSeperator && !dividedArg)
                 {
                     args.Add(sb.ToString());
                     sb.Clear();
@@ -35,8 +27,7 @@ namespace MatterOverdrive
                     sb.Append(c);
             }
 
-            if (sb.Length > 0)
-                args.Add(sb.ToString());
+            args.Add(sb.ToString());
 
             return args;
         }

@@ -9,7 +9,7 @@ namespace MatterOverdrive.Commands.Utility
 {
     public class HelpAndroidCommand : AndroidCommand
     {
-        public HelpAndroidCommand() : base("help", new Module[0], "?")
+        public HelpAndroidCommand() : base("help", "?")
         {
         }
 

@@ -6,38 +6,42 @@ using Terraria.ModLoader;
 
 namespace MatterOverdrive.Commands
 {
-    public sealed class OpenConsoleCommand : ModCommand
+    public sealed class OpenConsoleCommand : AndroidCommand
     {
-        public override void Action(CommandCaller caller, string input, string[] args)
+        public OpenConsoleCommand() : base("console")
         {
-            if (args.Length == 0)
-            {
-                AndroidConsole.Open();
-                return;
+        }
 
-                if (caller.Player == Main.LocalPlayer)
+
+        public override bool Run(MOPlayer moPlayer, string usedName, string inputLine, List<string> args)
+        {
+            if (args.Count == 0)
+            {
+                //AndroidConsole.Open();
+                //return;
+
+                if (moPlayer.player == Main.LocalPlayer)
                     MOMod.Instance.TerminalLayer.TerminalUIState.Visible = true;
 
-                return;
+                return true;
             }
 
-            List<string> parsedArgs = input.ParseLine();
+            List<string> parsedArgs = inputLine.ParseLine();
             parsedArgs.RemoveAt(0);
 
             string commandName = parsedArgs[0];
             parsedArgs.RemoveAt(0);
-            
+
             if (!CommandLoader.Instance.Exists(commandName))
             {
                 Main.NewText($"Command '{commandName}' not found. Use /help for a list of available commands.");
-                return;
+                return true;
             }
 
-            CommandLoader.Instance.TryRunning(caller.Player.GetModPlayer<MOPlayer>(), commandName, input, parsedArgs);
+            return CommandLoader.Instance.TryRunning(moPlayer.player.GetModPlayer<MOPlayer>(), commandName, inputLine, parsedArgs);
         }
 
 
-        public override string Command { get; } = "console";
         public override CommandType Type { get; } = CommandType.Chat;
     }
 }

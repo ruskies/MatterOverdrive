@@ -8,12 +8,12 @@ namespace MatterOverdrive.Commands
 {
     public abstract class AndroidCommand : ModCommand
     {
-        protected AndroidCommand(string name, params Module[] requiredModules) : this(name, requiredModules, new string[0]) { }
+        protected AndroidCommand(string name, params string[] aliases) : this(name, new ModuleVersion[0], aliases) { }
 
-        protected AndroidCommand(string name, Module[] requiredModule, params string[] aliases)
+        protected AndroidCommand(string name, ModuleVersion[] requiredModuleVersions, params string[] aliases)
         {
             Command = name;
-            RequiredModules = requiredModule;
+            RequiredModulesVersions = requiredModuleVersions;
 
             Aliases = new List<string>(aliases).AsReadOnly();
         }
@@ -48,15 +48,25 @@ namespace MatterOverdrive.Commands
 
         public virtual bool CanUse(MOPlayer moPlayer)
         {
-            //if (moPlayer.HasModule())
+            if (!moPlayer.Android)
+                return false;
+
+            for (int i = 0; i < RequiredModulesVersions.Length; i++)
+                if (!moPlayer.HasModule(RequiredModulesVersions[i]))
+                    return false;
+
             return true;
         }
-        
-        
+
+        public virtual string GetUsage(MOPlayer player) => "";
+
+
         public override string Command { get; }
+        public override string Usage => GetUsage(MOPlayer.Get());
+
         public override CommandType Type { get; } = CommandType.Chat;
 
-        public Module[] RequiredModules { get; }
+        public ModuleVersion[] RequiredModulesVersions { get; }
 
         public IReadOnlyList<string> Aliases { get; }
     }

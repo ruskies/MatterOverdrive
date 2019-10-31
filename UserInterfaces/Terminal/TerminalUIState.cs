@@ -26,8 +26,6 @@ namespace MatterOverdrive.UserInterfaces.Terminal
 
         public override void OnInitialize()
         {
-            Visible = true;
-
             MainPanel = new UIPanel();
             MainPanel.Width.Set(PANEL_WIDTH, 0);
             MainPanel.Height.Set(PANEL_HEIGHT, 0);
